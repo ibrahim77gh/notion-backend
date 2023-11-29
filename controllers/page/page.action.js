@@ -36,9 +36,9 @@ module.exports.create = async (request, response) => {
     }
     const req = await PageModel.create({
       title: request?.body?.title,
-      content: `<p>${request?.body?.title}<p>`,
+      content: `<h1>${request?.body?.title}<h1>`,
     });
-    response.status(200).json("Page created");
+    response.status(200).json(req);
   } catch (error) {
     response.status(500).json("Some Error Occured");
   }

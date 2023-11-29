@@ -41,13 +41,14 @@ wss.on("connection", (ws, req) => {
   // Handle incoming messages from clients
   ws.on("message", (message) => {
     const roomClients = roomIds[roomId] ?? [];
+    console.log(roomClients.length)
     // Broadcast the message to all connected clients in a room
     if (roomClients?.length) {
       for (const client of roomClients) {
         const index = clients.indexOf(client);
         if (
           index !== -1 &&
-          // client != ws &&
+          client != ws &&
           client.readyState === WebSocket.OPEN
         ) {
           client.send(message);
@@ -59,6 +60,7 @@ wss.on("connection", (ws, req) => {
   // Handle disconnection
   ws.on("close", () => {
     console.log("Client disconnected");
+    roomIds[roomId] = [];
   });
 });
 
