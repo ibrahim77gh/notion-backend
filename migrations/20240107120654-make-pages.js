@@ -1,8 +1,10 @@
-"use strict";
-/** @type {import('sequelize-cli').Migration} */
+// migrations/xxxxxxxxxxxxxx-create-pages.js
+
+'use strict';
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Pages", {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Pages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,9 +14,11 @@ module.exports = {
       title: {
         type: Sequelize.STRING,
         unique: true,
+        allowNull: false,
       },
       content: {
-        type: Sequelize.TEXT,
+        type: Sequelize.BLOB,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -26,7 +30,8 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Pages");
+
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Pages');
   },
 };

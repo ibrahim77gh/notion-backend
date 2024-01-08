@@ -11,17 +11,24 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hocuspocus/extension-database": "^2.9.0",
+    "@hocuspocus/server": "^2.9.0",
+    "@hocuspocus/transformer": "^2.9.0",
+    "@tiptap/extension-document": "^2.1.13",
+    "@tiptap/extension-paragraph": "^2.1.13",
+    "@tiptap/extension-text": "^2.1.13",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-ws": "^5.0.2",
     "js-base64": "^3.7.5",
     "lumie": "^0.1.2",
     "multer": "^1.4.5-lts.1",
-    "mysql2": "^3.6.3",
-    "sequelize": "^6.34.0",
+    "mysql2": "^3.6.5",
+    "nodemon": "^3.0.2",
+    "sequelize": "^6.35.2",
     "uid": "^2.0.2",
     "ws": "^8.14.2",
-    "y-websocket": "^1.5.0",
-    "yjs": "^13.6.8"
+    "y-websocket": "^1.5.0"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.2"

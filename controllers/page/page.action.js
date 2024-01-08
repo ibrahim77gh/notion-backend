@@ -36,7 +36,7 @@ module.exports.create = async (request, response) => {
     }
     const req = await PageModel.create({
       title: request?.body?.title,
-      content: `<h1>${request?.body?.title}<h1>`,
+      content: null,
     });
     response.status(200).json(req);
   } catch (error) {
@@ -56,3 +56,30 @@ module.exports.save = async (request, response) => {
     response.status(500).json("Some Error Occured");
   }
 };
+
+module.exports.deletePage = async (request, response) => {
+  try {
+    const titleToDelete = request?.params?.title;
+
+    // Check if the page with the specified title exists
+    const page = await PageModel.findOne({
+      where: { title: titleToDelete },
+    });
+
+    if (!page) {
+      response.status(404).json("Page not found");
+      return;
+    }
+
+    // Delete the page
+    await PageModel.destroy({
+      where: { title: titleToDelete },
+    });
+
+    response.status(200).json("Page deleted successfully");
+  } catch (error) {
+    console.log(error);
+    response.status(500).json("Some Error Occured");
+  }
+};
+

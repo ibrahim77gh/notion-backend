@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         unique: true, // Set to true to make it unique
       },
-      content: DataTypes.TEXT,
+      content:{
+        type: DataTypes.BLOB, // BLOB is used for storing binary data like Uint8Array
+        allowNull: true,
+      },
     },
     {
       sequelize,

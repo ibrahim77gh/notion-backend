@@ -1,5 +1,5 @@
 const { Server } = require("@hocuspocus/server");
-// const { Database } = require("@hocuspocus/extension-database");
+const { Database } = require("@hocuspocus/extension-database");
 // const mysql = require("mysql2/promise");
 // const config = require("./config/config.json");
 const db = require("./models/index");
@@ -45,39 +45,52 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const server = Server.configure({
   port: 1234,
-  async onStoreDocument(data) {
-    // Save to database using Sequelize
-    try {
-      await PageModel.upsert({
-        title: data.documentName,
-        content: Buffer.from(
-            Y.encodeStateAsUpdate(data.document),
-          ),
+  extensions: [
+    new Database({
+      // Replace onLoadDocument with fetch
+      fetch: async ({ documentName }) => {
+        return new Promise((resolve, reject) => {
+          db?.get(
+            `
+            SELECT data FROM "pages" WHERE title = $name ORDER BY rowid DESC
+          `,
+            {
+              $name: documentName,
+            },
+            (error, row) => {
+              if (error) {
+                reject(error);
+              }
+
+              resolve(row?.data);
+            }
+          );
         });
-    } catch (error) {
-      console.error("Error saving document to the database:", error);
-    }
-  },
+      },
+      // Replace onStoreDocument with store
+      store: async ({ documentName, state }) => {
+        return new Promise((resolve, reject) => {
+          db?.run(
+            `
+            INSERT INTO "pages" ("title", "content") VALUES ($name, $data)
+              ON CONFLICT(name) DO UPDATE SET data = $data
+          `,
+            {
+              $name: documentName,
+              $data: state,
+            },
+            (error) => {
+              if (error) {
+                reject(error);
+              }
 
-  async onLoadDocument(data) {
-    // Load from the database using Sequelize
-    const documentRecord = await PageModel.findOne({
-      where: { title: data.documentName },
-    });
-    
-    if (documentRecord) {
-      if (documentRecord.content){
-        Y.applyUpdate(data.document, documentRecord.content)
-        return data.document
-      } else {
-        const yjsDoc = new Y.Doc();
-        return yjsDoc;
-      }
-    }
-
-    // If not found in the database, create an initial document template
-    return createInitialDocTemplate(data.documentName);
-  },
+              resolve();
+            }
+          );
+        });
+      },
+    }),
+  ],
   async onAuthenticate(data) {
     const { token } = data;
 

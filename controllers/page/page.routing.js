@@ -1,4 +1,4 @@
-const { get, create, save, getOne } = require("./page.action.js");
+const { get, create, save, getOne, deletePage } = require("./page.action.js");
 
 module.exports = {
   "/": {
@@ -14,6 +14,10 @@ module.exports = {
   "/:title": {
     get: {
       action: getOne,
+      level: "public",
+    },
+    delete: {
+      action: deletePage,
       level: "public",
     },
   },
