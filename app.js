@@ -45,6 +45,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const server = Server.configure({
   port: 1234,
+  timeout: 10000,
   async onStoreDocument(data) {
     // Save to database using Sequelize
     try {
