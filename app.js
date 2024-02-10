@@ -1,7 +1,4 @@
 const { Server } = require("@hocuspocus/server");
-// const { Database } = require("@hocuspocus/extension-database");
-// const mysql = require("mysql2/promise");
-// const config = require("./config/config.json");
 const db = require("./models/index");
 const PageModel = db.Pages;
 const Y = require('yjs');
@@ -11,18 +8,10 @@ const lumie = require("lumie");
 const express = require("express");
 const expressWebsockets = require('express-ws')
 
-// const document = require('@tiptap/extension-document')
-// const paragraph = require('@tiptap/extension-paragraph')
-// const text = require('@tiptap/extension-text')
-
-
-// const WebSocket = require("ws");
 var bodyParser = require("body-parser");
 
 const cors = require("cors");
-const { TiptapTransformer } = require("@hocuspocus/transformer");
 // app
-// const app = express();
 const { app } = expressWebsockets(express());
 
 app.use(cors());
